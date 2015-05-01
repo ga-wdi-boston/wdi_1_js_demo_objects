@@ -9,13 +9,13 @@ So, javascript doesn't provide a **class** keyword that is used in these other l
 But, we can emulate what is the typical behavior of the **class** keyword in other OO languages. And that typical behavior is be create an object factory.
 
 ## Objectives
-
-* Implement **inheritence** using Prototypical Inheritence.
+* Use javascript's property lookup mechanism.
+* Implement **inheritance** using Prototypical inheritance.
 * Only create objects with object literal syntax when you need only one of that "type" of object.
 * Create objects using a **Factory** (optional).
 * Create objects using the a **Constructor** function.
 * Create objects using the **Object.create** method.
-* * Create a **Namespace**.
+* Create a **Namespace**.
 
 
 ## Javascript Background (optional)
@@ -33,28 +33,44 @@ But, it does provide a way to create structures that behave like classes. We'll 
 
 [Object Literals](ObjectLiterals.md)
 
-## Prototypical Inheritence
+## Property Lookup.
 
-Each object will have an internal ``__proto__`` property that can point to another object. Each object also has a prototype property. **These are NOT the same**.  
+Each object will have an internal ``__proto__`` property that can point to another object.  
 
-The ``__proto__`` is an often hidden internal property on an object. *Most browsers will let you see it tho*. An Object's ``__proto_`` property will point to the [Object.prototype](http://goo.gl/C568wU) property by default when the object is created.  
+The ``__proto__`` is an often hidden internal property on an object. *Most browsers will let you see it tho*. By default, an object's ``__proto__`` property will point to the built-in [Object](http://goo.gl/C568wU) class.
 
-This Object 'class' prototype object has a bunch of attributes and methods.
 
-An object's ``__proto__`` pointer will be used to lookup properties, _(values and methods)_. 
+An object's ``__proto__`` pointer will be used to lookup properties and methods. 
+
+**Create a file js/property_lookup.js and reference it from index.html**
+
+```javascript
+var joe = {
+  name: "Joe Smoe",
+  age: 23
+}
+debugger;
+
+console.log(joe.valueOf());
+```
 
 ![Object Literal Prototype](images/object_literal_prototype.png)  
 
-For the example above:  
-* When one calls joe.toString().  
-* js will look for the property toString in the joe object literal.  
+For the example above, when one calls joe.valueOf(). 
+
+ 
+* js will look for the property valueOf in the joe object literal.  
 * It will __not__ be found.  
-* js will look for the property toString in the object pointed to by ``joe.__proto__``. _This is the Object.prototype._    
-* js will find the toString method on Object.prototype and execute it.  
+* js will look for the property valueOf in the object pointed to by ``joe.__proto__``.  
+>>	_This is the Object.prototype, another words the Object class._ 
 
+* js will find the valueOf method on Object.prototype and execute it.  
 
+**WARNING!! Each object also has a prototype property. These is NOT the same as the `__proto__` property.** 
 
-__By setting this ``__proto_`` property we can _simulate_ object inheritance.__  
+## Protypical inheritance
+
+By setting this ``__proto__`` property we can use object inheritance. 
 
 __Create a file js/simple_prototype.js with the below code and reference it from index.html.__
 
@@ -70,7 +86,7 @@ debugger;
 // Check the __proto__ property of person
 // It should point to the Object.prototype
 
-// In the console enter person.toString()
+// In the console enter person.valueOf()
 // The method will be found by following the object pointed to by the __proto__ property.
 
 // Create an Object literal representing one person.
@@ -149,9 +165,9 @@ Redo the Sponge Bob code using the Factory pattern.
 
 ### The Constructor Function Pattern.
 
-This is the most common way to create objects in Javascript. It's the most common way to implement Classes. This pattern is used with the javascript _new_ keyword to create objects.
+This is the most common way to create objects in Javascript. It's the most common way to implement classes. We'll be using a **Constructor Function** and the javascript **new** keyword to create objects.
 
-Many environments, including browsers, are optimized to use this kind of constructor. The *convention* is to uppercase the first name of a function that will be used as a constructor.
+Many environments, including browsers, are optimized to use this kind of constructor function. The *convention* is to camelcase the name of a function that will be used as a constructor.
 
 
 __Create a file js/constructor_function.js with the below code and reference it from index.html.__
