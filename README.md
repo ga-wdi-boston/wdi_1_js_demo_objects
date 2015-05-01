@@ -2,13 +2,14 @@
 
 ## Object Oriented Javascript 
 
-[Javascript Background](Background.md)
+
 ## Objectives
 
-* Create a Namepace to reduce name collisions.
-* Define methods using Prototypical Inheritence.
+* Implement **inheritence** using Prototypical Inheritence.
+* Only create objects with object literal syntax when creating a singleton.
+* Create a **Namespace**.
+* Create objects using a Factory (optional).
 * Create objects using the a Constructor function.
-* Create objects using a Factory.
 * Create objects using the Object.create method.
 
 Learn about the most common ways to create Javascript Objects.
@@ -22,6 +23,9 @@ Learn about the most common ways to create Javascript Objects.
 * How Object method lookup works.
 
 
+## Javascript Background (optional)
+[Javascript Background](JavascriptBackground.md)
+
 ## No Classes in Javascript.
 
 Javascript does not have classes. _At least not yet, they are coming in ECMAScript 6_. 
@@ -34,11 +38,11 @@ But, it does provide a way to create structures that behave like classes. We'll 
 
 [Object Literals](ObjectLiterals.md)
 
-### Prototypical Inheritence
+## Prototypical Inheritence
 
 Each object will have an internal ``__proto__`` property that can point to another object. Each object also has a prototype property. **These are NOT the same**.  
 
-The ``__proto__`` is a often hidden internal property on an object. *Most browsers will let you see it tho*. An Object Literal's ``__proto_`` property will point to the [Object.prototype](http://goo.gl/C568wU) property by default when the object is created.  
+The ``__proto__`` is an often hidden internal property on an object. *Most browsers will let you see it tho*. An Object's ``__proto_`` property will point to the [Object.prototype](http://goo.gl/C568wU) property by default when the object is created.  
 
 This Object 'class' prototype object has a bunch of attributes and methods.
 
@@ -57,7 +61,7 @@ For the example above:
 
 __By setting this ``__proto_`` property we can _simulate_ object inheritance.__  
 
-___Create a file js/simple_prototype.js with the below code and reference it from index.html.__
+__Create a file js/simple_prototype.js with the below code and reference it from index.html.__
 
 ```
 var person = {
@@ -113,17 +117,25 @@ We will have to create lots of object literals and each time a property or metho
 For example, we want to change each person to have an occupation
 that is shown in the describe function?
 
-Use Object literals for instances that will exist only once, Singletons, in your application. For example,if you have only one  Company or Team in you app then create only one instance of it. 
+Use Object literals for instances that will exist only once in your application. Sometimes you'll hear a single object referred to as a **Singleton**. 
 
-Later, we will see how to emulate a class in Javascript that will be used to creates instances, objects, of something.
+For example,if you have only one  Company or Team in you app then create only one instance of it. 
 
-### Using Object Literals to create a Namespace.
+Later, we will see how to emulate a class in Javascript that will be used to creates instances, objects, of something. One way to think about a class is that it's a *Factory* that produces objects.
 
-Javascript namespaces are used to disambiguate names in an application. This is so that names in an application do not conflict.
 
-Typically, name conflict may happen when using a third-party library or plug-in.
+## Using Object Literals to create a Namespace.
 
-_We will use namespaces later when we create objects._
+Javascript namespaces are used to disambiguate names in an application. We create **namespaces** so that variable names in an application do not conflict.
+
+Typically, name conflicts may happen when using a third-party library or plug-in. The library has a global variable named  `count`. And your program has a global variable named `count`. 
+
+If your program doesn't know about the library `count` and your code changes `count`, **the gates of hell will open and you'll be thrown into it. Gnashing teeth, etc.**
+
+Your changing library code can cause **VERY** difficult to find errors.
+
+
+__Create a file js/personAppNamespace.js__
 
 __Note:__  
 _The var PersonApp = PersonApp || {}; will be set in each file that uses the namespace._ 
@@ -131,23 +143,40 @@ _The var PersonApp = PersonApp || {}; will be set in each file that uses the nam
 _Only the first file will actually set the PersonApp to {}. The other files will just assign PersonApp to itself._
 
 ```
-// create a namespace for this PersonApp 
-// If PersonApp object already exist than set it to itself.
-// Otherwise set it to an empty object literal.
+// Create a PersonApp namespace.
+// It's just and object literal being used as a namespace.
 var PersonApp = PersonApp || {};
 
 // Namespace an object literal
 PersonApp.joe = { name: 'joe', age: 23 };
 
-// Namespace a Factory 
-PersonApp.createPerson = function(){ ... };
-var joe = PersonApp.createPerson('joe', 23);
+PersonApp.jill = {name: 'jill', age: 33}
 
-// Namespace a Constructor Function
-PersonApp.Person = function Person(){ .. };
-var jill = new PersonApp('jill', 33);
+PersonApp.addPerson = function(person){
+  if(PersonApp.people === undefined){
+    PersonApp.people = [];
+  }
+  PersonApp.people.push(person);
+};
+
+PersonApp.showPeople = function(){
+  if(PersonApp.people === undefined){
+    console.log("No People");
+  }else{
+    PersonApp.people.forEach(function(person){
+      console.log(person.name + " is " + person.age + " yrs old");
+    })
+  }
+};
+
+PersonApp.addPerson(PersonApp.joe);
+PersonApp.addPerson(PersonApp.jill);
+
+PersonApp.showPeople();
 
 ```
+
+**Look ma, no globals! Aren't you proud of me (big child like smile)**
 
 ## Object Creation Patterns.
 
@@ -171,7 +200,7 @@ The Factory Pattern will use a function to create object literals. The arguments
 [Factory Pattern](FactoryPattern.md)
 
 
-## LAB
+## Lab (optional)
 
 Redo the Sponge Bob code using the Factory pattern. 
 
