@@ -2,25 +2,20 @@
 
 ## Object Oriented Javascript 
 
+Unlike many other languages, (Ruby, Java, Smalltalk), javascript does not provide or even assume that you will be creating programs using the Object Oriented paradigm.
+
+So, javascript doesn't provide a **class** keyword that is used in these other languages to define an Object "Factory". 
+
+But, we can emulate what is the typical behavior of the **class** keyword in other OO languages. And that typical behavior is be create an object factory.
 
 ## Objectives
 
 * Implement **inheritence** using Prototypical Inheritence.
-* Only create objects with object literal syntax when creating a singleton.
-* Create a **Namespace**.
-* Create objects using a Factory (optional).
-* Create objects using the a Constructor function.
-* Create objects using the Object.create method.
-
-Learn about the most common ways to create Javascript Objects.
-	* Object Literal.  
-	* Factory Pattern.  
-	* Constructor Function.  
-	* ECMAScript 5 Object.create  
-* Use Javascript Namespaces.
-* Learn about Prototypes and Prototypical Inheritence.
-* How Object property lookup works.
-* How Object method lookup works.
+* Only create objects with object literal syntax when you need only one of that "type" of object.
+* Create objects using a **Factory** (optional).
+* Create objects using the a **Constructor** function.
+* Create objects using the **Object.create** method.
+* * Create a **Namespace**.
 
 
 ## Javascript Background (optional)
@@ -124,60 +119,6 @@ For example,if you have only one  Company or Team in you app then create only on
 Later, we will see how to emulate a class in Javascript that will be used to creates instances, objects, of something. One way to think about a class is that it's a *Factory* that produces objects.
 
 
-## Using Object Literals to create a Namespace.
-
-Javascript namespaces are used to disambiguate names in an application. We create **namespaces** so that variable names in an application do not conflict.
-
-Typically, name conflicts may happen when using a third-party library or plug-in. The library has a global variable named  `count`. And your program has a global variable named `count`. 
-
-If your program doesn't know about the library `count` and your code changes `count`, **the gates of hell will open and you'll be thrown into it. Gnashing teeth, etc.**
-
-Your changing library code can cause **VERY** difficult to find errors.
-
-
-__Create a file js/personAppNamespace.js__
-
-__Note:__  
-_The var PersonApp = PersonApp || {}; will be set in each file that uses the namespace._ 
-
-_Only the first file will actually set the PersonApp to {}. The other files will just assign PersonApp to itself._
-
-```
-// Create a PersonApp namespace.
-// It's just and object literal being used as a namespace.
-var PersonApp = PersonApp || {};
-
-// Namespace an object literal
-PersonApp.joe = { name: 'joe', age: 23 };
-
-PersonApp.jill = {name: 'jill', age: 33}
-
-PersonApp.addPerson = function(person){
-  if(PersonApp.people === undefined){
-    PersonApp.people = [];
-  }
-  PersonApp.people.push(person);
-};
-
-PersonApp.showPeople = function(){
-  if(PersonApp.people === undefined){
-    console.log("No People");
-  }else{
-    PersonApp.people.forEach(function(person){
-      console.log(person.name + " is " + person.age + " yrs old");
-    })
-  }
-};
-
-PersonApp.addPerson(PersonApp.joe);
-PersonApp.addPerson(PersonApp.jill);
-
-PersonApp.showPeople();
-
-```
-
-**Look ma, no globals! Aren't you proud of me (big child like smile)**
-
 ## Object Creation Patterns.
 
 The problem with Object Literals is that they can get very tedious. For example, if we have to create a new object literal for each Person and there are many people. 
@@ -270,16 +211,77 @@ __Run the above code and look at the Person.prototype and object ``__proto__``  
 
 
 ## LAB
-Redo the Car Lot Lab above using Constructor Functions. __Do all your work in the cars_constructor_function branch.__
+__Create a file js/cars.js__
 
-## Demo
-### Object.create (optional)
+* Create a Car Constructor Function.
+* Each car object will have a make, model and year.
+* Each car will have a display method that will return a string describing that car.
+* Namespace the Car Constructor Function.
+
+
+
+## Demo Object.create (optional)
 
 ECMAScript 5 defined a new way to create an object. Object.create(...).
 
 You will be seeing this more as time goes on and developers make use of this. For now, we will be using the Constructor Function to create objects.
 
 [Object.create](ObjectCreate.md)
+
+## Using Object Literals to create a Namespace.
+
+Javascript namespaces are used to disambiguate names in an application. We create **namespaces** so that variable names in an application do not conflict.
+
+Typically, name conflicts may happen when using a third-party library or plug-in. The library has a global variable named  `count`. And your program has a global variable named `count`. 
+
+If your program doesn't know about the library `count` and your code changes `count`, **the gates of hell will open and you'll be thrown into it. Gnashing teeth, etc.**
+
+Your changing library code can cause **VERY** difficult to find errors.
+
+
+__Create a file js/personAppNamespace.js__
+
+__Note:__  
+_The var PersonApp = PersonApp || {}; will be set in each file that uses the namespace._ 
+
+_Only the first file will actually set the PersonApp to {}. The other files will just assign PersonApp to itself._
+
+```
+// Create a PersonApp namespace.
+// It's just and object literal being used as a namespace.
+var PersonApp = PersonApp || {};
+
+// Namespace an object literal
+PersonApp.joe = { name: 'joe', age: 23 };
+
+PersonApp.jill = {name: 'jill', age: 33}
+
+PersonApp.addPerson = function(person){
+  if(PersonApp.people === undefined){
+    PersonApp.people = [];
+  }
+  PersonApp.people.push(person);
+};
+
+PersonApp.showPeople = function(){
+  if(PersonApp.people === undefined){
+    console.log("No People");
+  }else{
+    PersonApp.people.forEach(function(person){
+      console.log(person.name + " is " + person.age + " yrs old");
+    })
+  }
+};
+
+PersonApp.addPerson(PersonApp.joe);
+PersonApp.addPerson(PersonApp.jill);
+
+PersonApp.showPeople();
+
+```
+
+**Look ma, no globals! Aren't you proud of me (big child like smile)**
+
 
 ### References
 * [MDN Object Oriented Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript)
@@ -301,19 +303,13 @@ Chapter 6.
 
 ## Summary.
 
-* Javascript is standardized by ECMAScript. Currently we are using ECMA 5, but ECMA 6 is right around the corner with new functionality.
-* Primitves Types are built-in and atomic.
-* Some Primitves Types have object wrappers.
-* Primitive Types are assigned to variables and properites by value.
-* Reference Types, Objects, are assigned to variables and properties by reference.
-* Object Literals are somewhat like Maps or Hashes in other languages.
 * Object Literals should only be used when you ONLY need one instance of an object.
 * Creating Objects with the Factory Pattern, or Factory method.
 * Creating Objects with the new keyword and Constructor functions. __USE THIS METHOD__
 * Creating Objects with Object.create(...).
 * Most prevalant way to create objects is with the 'new' keyword and Constructor Functions.
-* Learn about Prototypes and Prototypical Inheritance.
-* Learn about property and method lookup.
+* Learned about Prototypes and Prototypical Inheritance.
+* Learned about property and method lookup.
 
 
 
